@@ -1,0 +1,87 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(NvkStoregeApp());
+}
+
+class NvkStoregeApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'NVKSTOREGE',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: AccueilPage(),
+    );
+  }
+}
+
+class Bien {
+  final String titre;
+  final String type;
+  final String categorie;
+  final String nombre;
+  final String adresse;
+  final String proprietaire;
+  Bien({required this.titre, required this.type, required this.categorie, required this.nombre, required this.adresse, required this.proprietaire});
+}
+
+class AccueilPage extends StatefulWidget {
+  @override
+  _AccueilPageState createState() => _AccueilPageState();
+}
+
+class _AccueilPageState extends State<AccueilPage> {
+  int _index = 0;
+  String filtreType = 'Tous';
+  String recherche = '';
+  List<Bien> biens = [
+    Bien(titre: 'Maison familiale', type: 'Vente', categorie: 'Maisons', nombre: '3 chambres, 2 douches', adresse: 'Bunia, Quartier Saio', proprietaire: 'M. Jean'),
+    Bien(titre: 'Parcelle cloturee', type: 'Vente', categorie: 'Parcelles', nombre: '20m x 30m', adresse: 'Bunia, Quartier Mudzi-Pela', proprietaire: 'Mme Sarah'),
+    Bien(titre: 'Chambre moderne', type: 'Location', categorie: 'Chambres', nombre: '1 chambre, 1 douche', adresse: 'Bunia, Quartier Ngezi', proprietaire: 'M. David'),
+    Bien(titre: 'Boutique au centre', type: 'Location', categorie: 'Boutiques', nombre: '1 grande salle', adresse: 'Bunia, Centre-ville', proprietaire: 'Mme Grace'),
+    Bien(titre: 'Appartement', type: 'Location', categorie: 'Appartements', nombre: '2 chambres, 1 salon', adresse: 'Bunia, Quartier Bankoko', proprietaire: 'M. Patrick'),
+  ];
+  List<String> categories = ['Tous', 'Maisons', 'Parcelles', 'Appartements', 'Chambres', 'Boutiques', 'Bureaux', 'Terrains'];
+  String categorieChoisie = 'Tous';
+
+  @override
+  Widget build(BuildContext context) {
+    List<Bien> filtres = biens.where((b) {
+      bool okType = filtreType == 'Tous' || b.type == filtreType;
+      bool okCat = categorieChoisie == 'Tous' || b.categorie == categorieChoisie;
+      bool okRecherche = recherche.isEmpty || b.titre.toLowerCase().contains(recherche.toLowerCase()) || b.adresse.toLowerCase().contains(recherche.toLowerCase());
+      return okType && okCat && okRecherche;
+    }).toList();
+    return Scaffold(
+      appBar: AppBar(title: Text('NVKSTOREGE'), centerTitle: true),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(padding: EdgeInsets.all(16), child: Text('Que cherches-tu a Bunia ?', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))),
+            Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: TextField(onChanged: (v) => setState(() => recherche = v), decoration: InputDecoration(hintText: 'Rechercher : Maison, Parcelle...', prefixIcon: Icon(Icons.search), border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))))),
+            SizedBox(height: 16),
+            Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: Row(children: [Expanded(child: _boutonType('Biens a Vendre', 'Vente', Icons.home)), SizedBox(width: 10), Expanded(child: _boutonType('Biens a Louer', 'Location', Icons.key))])),
+            SizedBox(height: 16),
+            Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: Text('Categories', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16))),
+            SizedBox(height: 8),
+            SingleChildScrollView(scrollDirection: Axis.horizontal, child: Row(children: categories.map((c) => Padding(padding: EdgeInsets.only(left: 8), child: ChoiceChip(label: Text(c), selected: categorieChoisie == c, onSelected: (_) => setState(() => categorieChoisie = c)))).toList())),
+            SizedBox(height: 16),
+            Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: Text('Biens publies (${filtres.length})', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16))),
+            ...filtres.map((b) => _carteBien(b)).toList(),
+            SizedBox(height: 20),
+          ],
+        ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(currentIndex: _index, onTap: (i) => setState(() => _index = i), type: BottomNavigationBarType.fixed, items: [BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Accueil'), BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Recherche'), BottomNavigationBarItem(icon: Icon(Icons.add_circle), label: 'Publier'), BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Compte')]),
+    );
+  }
+  Widget _boutonType(String titre, String valeur, IconData icone) {
+    bool actif = filtreType == valeur;
+    return GestureDetector(onTap: () => setState(() => filtreType = actif ? 'Tous' : valeur), child: Container(padding: EdgeInsets.all(16), decoration: BoxDecoration(color: actif ? Colors.blue : Colors.blue.shade50, borderRadius: BorderRadius.circular(12)), child: Column(children: [Icon(icone, color: actif ? Colors.white : Colors.blue), SizedBox(height: 6), Text(titre, textAlign: TextAlign.center, style: TextStyle(color: actif ? Colors.white : Colors.blue, fontWeight: FontWeight.bold))])));
+  }
+  Widget _carteBien(Bien b) {
+    return Card(margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8), child: ListTile(leading: Container(width: 60, height: 60, decoration: BoxDecoration(color: Colors.blue.shade100, borderRadius: BorderRadius.circular(8)), child: Icon(b.type == 'Vente' ? Icons.home : Icons.key, color: Colors.blue, size: 30)), title: Text(b.titre, style: TextStyle(fontWeight: FontWeight.bold)), subtitle: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [SizedBox(height: 4), Text('${b.type} - ${b.categorie}'), Text('Nombre : ${b.nombre}'), Text('${b.adresse}'), Text('Prix : A discuter', style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold))]), trailing: Icon(Icons.arrow_forward_ios, size: 16), onTap: () { showDialog(context: context, builder: (_) => AlertDialog(title: Text(b.titre), content: Text('${b.type}\n${b.nombre}\n${b.adresse}\n\nProprietaire : ${b.proprietaire}\n\nPrix a discuter entre vous.'), actions: [TextButton(onPressed: () => Navigator.pop(context), child: Text('Fermer')), ElevatedButton(onPressed: () => Navigator.pop(context), child: Text('Contacter'))])); }));
+  }
+}
