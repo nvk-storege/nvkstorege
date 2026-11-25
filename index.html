@@ -5,82 +5,89 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NVK STOREGE</title>
 <style>
-* { margin:0; padding:0; box-sizing:border-box; font-family: Arial, sans-serif; }
-body { background:#f2f4f8; }
-.header { background:#0b3d91; color:white; padding:18px 15px; text-align:center; }
-.header h1 { font-size:26px; letter-spacing:1px; }
-.header p { font-size:13px; opacity:0.9; margin-top:4px; }
-.search-box { padding:12px; background:white; }
-.search-box input { width:100%; padding:12px; border:1px solid #ddd; border-radius:25px; font-size:15px; }
-.lang { display:flex; justify-content:center; gap:8px; padding:8px; }
-.lang button { padding:6px 12px; border:1px solid #0b3d91; background:white; color:#0b3d91; border-radius:20px; cursor:pointer; }
-.lang button.active { background:#0b3d91; color:white; }
-.grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:15px; }
-.card { background:white; border-radius:12px; padding:20px 10px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.08); cursor:pointer; }
-.card span { font-size:32px; display:block; }
-.card h3 { margin-top:8px; color:#0b3d91; font-size:16px; }
-.card p { font-size:12px; color:#666; margin-top:4px; }
-.publish { grid-column: span 2; background:#ff7a00; color:white; }
-.publish h3 { color:white; }
-.publish p { color:white; }
-.section { padding:0 15px 15px; }
-.section h2 { font-size:16px; margin-bottom:10px; color:#222; }
-.empty { background:white; padding:20px; text-align:center; color:#888; border-radius:10px; font-size:14px; }
-.footer { text-align:center; padding:15px; font-size:12px; color:#888; }
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#f2f4f7}
+header{background:#0B2C6B;color:white;padding:16px;text-align:center}
+header h1{font-size:28px}
+.lang{margin-top:10px;display:flex;gap:6px;justify-content:center}
+.lang button{border:1px solid white;background:transparent;color:white;padding:6px 10px;border-radius:20px;font-weight:bold}
+.lang button.active{background:white;color:#0B2C6B}
+.search{padding:14px;background:white;display:flex;gap:8px}
+.search input{flex:1;padding:12px;border:1px solid #ddd;border-radius:10px}
+.search button{background:#FF8C00;color:white;border:0;padding:12px 16px;border-radius:10px;font-weight:bold}
+.hero{padding:18px;text-align:center}
+.hero h2{color:#0B2C6B}
+.grid4{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 14px}
+.card{background:white;border-radius:16px;padding:18px 10px;text-align:center}
+.card b{display:block;margin-top:8px}
+.card small{color:#666}
+.card.orange{background:#FF8C00;color:white}
+.card.orange small{color:white}
+.section{padding:18px 14px 6px}
+.cats{display:flex;gap:10px;overflow-x:auto}
+.cat{white-space:nowrap;background:white;border:1px solid #ddd;padding:9px 14px;border-radius:20px}
+.cat.active{background:#0B2C6B;color:white}
+.annonces{display:grid;gap:12px;padding:0 14px 14px}
+.annonce{background:white;border-radius:16px;overflow:hidden}
+.annonce img{width:100%;height:170px;object-fit:cover}
+.annonce-body{padding:12px}
+.badge{background:#E8F0FF;color:#0B2C6B;font-size:11px;font-weight:bold;padding:4px 8px;border-radius:20px}
+.prix{font-size:18px;font-weight:bold;color:#0B2C6B;margin:6px 0}
+.muted{color:#666;font-size:13px}
+.btn{width:100%;margin-top:10px;padding:12px;border:0;border-radius:10px;font-weight:bold}
+.btn-blue{background:#0B2C6B;color:white}
+.btn-orange{background:#FF8C00;color:white}
+.pricing{background:white;margin:14px;border-radius:16px;padding:16px}
+.pricing li{margin:8px 0 8px 16px;font-size:14px}
+footer{background:#0B2C6B;color:white;text-align:center;padding:18px;font-size:13px}
 </style>
 </head>
 <body>
-
-<div class="header">
-  <h1>NVK STOREGE</h1>
-  <p>Une seule plateforme, toutes les opportunités.</p>
-</div>
-
-<div class="search-box">
-  <input type="text" placeholder="Que cherchez-vous ? Moto, maison, terrain...">
-</div>
-
+<header><h1>NVK STOREGE</h1><p id="slogan">Une seule plateforme, toutes les opportunités.</p>
 <div class="lang">
-  <button class="active">Français</button>
-  <button>English</button>
-  <button>Swahili</button>
-  <button>Lingala</button>
+<button class="active" onclick="setLang('fr',this)">FRANÇAIS</button>
+<button onclick="setLang('en',this)">ENGLISH</button>
+<button onclick="setLang('sw',this)">SWAHILI</button>
+<button onclick="setLang('ln',this)">LINGALA</button>
+</div></header>
+<div class="search"><input id="searchInput" placeholder="Rechercher : maison Bunia, parcelle, moto..." oninput="filtrer()"><button onclick="filtrer()">RECHERCHER</button></div>
+<div class="hero"><h2 id="heroTitle">Que cherches-tu aujourd'hui ?</h2><p>Consulter est GRATUIT. Tu paies seulement pour publier ou débloquer les contacts.</p></div>
+<div class="grid4">
+<div class="card" onclick="showCat('VENTE')"><span style="font-size:32px">🛒</span><b>VENTE</b><br><small>Parcelles, maisons, voitures...</small></div>
+<div class="card" onclick="showCat('LOCATION')"><span style="font-size:32px">🏠</span><b>LOCATION</b><br><small>Maisons, chambres, boutiques...</small></div>
+<div class="card" onclick="showCat('SERVICES')"><span style="font-size:32px">🔧</span><b>AUTRES SERVICES</b><br><small>Emploi, transport, réparation...</small></div>
+<div class="card orange" onclick="publier()"><span style="font-size:32px">➕</span><b>PUBLIER UNE ANNONCE</b><br><small>Gagne en vendant / louant</small></div>
 </div>
-
-<div class="grid">
-  <div class="card">
-    <span>🛒</span>
-    <h3>VENTE</h3>
-    <p>Vendre & Acheter</p>
-  </div>
-  <div class="card">
-    <span>🏠</span>
-    <h3>LOCATION</h3>
-    <p>Louer & Se loger</p>
-  </div>
-  <div class="card">
-    <span>🔧</span>
-    <h3>AUTRES SERVICES</h3>
-    <p>Prestataires & Clients</p>
-  </div>
-  <div class="card publish">
-    <span>➕</span>
-    <h3>PUBLIER UNE ANNONCE</h3>
-    <p>Publier après paiement</p>
-  </div>
+<div class="section"><h3>Catégories populaires</h3><div class="cats">
+<button class="cat active" onclick="filterCat('TOUT',this)">Tout</button>
+<button class="cat" onclick="filterCat('Immobilier',this)">🏠 Immobilier</button>
+<button class="cat" onclick="filterCat('Véhicules',this)">🚗 Véhicules</button>
+<button class="cat" onclick="filterCat('Services',this)">🔧 Services</button>
+</div></div>
+<div class="section"><h3>Annonces récentes - Bunia</h3></div>
+<div class="annonces" id="liste">
+<div class="annonce" data-cat="Immobilier" data-text="maison louer bunia"><img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800"><div class="annonce-body"><span class="badge">LOCATION • IMMOBILIER</span><div class="prix">150 USD / mois</div><b>Maison 3 chambres à louer - Bunia, Mudzi-Pela</b><p class="muted">📍 Bunia • Disponible</p><p class="muted">👤 Nom & Téléphone : 🔒 Caché - Débloquer après paiement</p><button class="btn btn-blue" onclick="debloquer('Maison Bunia')">DÉBLOQUER LE CONTACT - 0,80 USD</button></div></div>
+<div class="annonce" data-cat="Immobilier" data-text="parcelle acheter bunia"><img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800"><div class="annonce-body"><span class="badge">VENTE • IMMOBILIER</span><div class="prix">2 500 USD • Prix négociable</div><b>Parcelle 20x30 à vendre - Bunia, Ngezi</b><p class="muted">📍 Bunia • Disponible</p><p class="muted">👤 Nom & Téléphone : 🔒 Caché</p><button class="btn btn-blue" onclick="debloquer('Parcelle Bunia')">DÉBLOQUER LE CONTACT - 0,80 USD</button></div></div>
+<div class="annonce" data-cat="Véhicules" data-text="moto vendre"><img src="https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=800"><div class="annonce-body"><span class="badge">VENTE • VÉHICULES</span><div class="prix">950 USD</div><b>Moto Haojin 125 - Très bon état</b><p class="muted">📍 Bunia • Disponible</p><p class="muted">👤 Nom & Téléphone : 🔒 Caché</p><button class="btn btn-blue" onclick="debloquer('Moto')">DÉBLOQUER LE CONTACT - 0,80 USD</button></div></div>
 </div>
-
-<div class="section">
-  <h2>Annonces Récentes</h2>
-  <div class="empty">Aucune annonce pour le moment.<br>Les nouvelles annonces apparaîtront ici.</div>
-</div>
-
-<div class="section">
-  <h2>Annonces Populaires</h2>
-  <div class="empty">Aucune annonce populaire pour le moment.</div>
-</div>
-
-<div class="footer">NVK STOREGE © 2026 - Bunia, RDC</div>
-
+<div class="pricing"><h3>💰 Comment NVK STOREGE gagne ?</h3><ul>
+<li><b>Publier :</b> Grande valeur : 1 USD / 2 mois, 2,50 USD / 6 mois, 5 USD / 12 mois</li>
+<li><b>Publier :</b> Petite valeur : 0,80 USD / 3 mois, 1,50 USD / 6 mois, 3 USD / 12 mois</li>
+<li><b>Recherche :</b> 0,80 USD / 1 mois, 1,50 USD / 2 mois, 2 USD / 3 mois</li>
+<li><b>Commission :</b> 1% total = 0,5% vendeur + 0,5% acheteur. Ex: 1000 USD = 10 USD (5+5)</li>
+<li><b>Paiement :</b> M-Pesa, Airtel Money, Orange Money, Carte bancaire</li>
+<li><b>🎁 PROMO :</b> 2 mois gratuits après lancement officiel</li>
+</ul><button class="btn btn-orange" onclick="publier()">PUBLIER MON ANNONCE MAINTENANT</button></div>
+<footer>NVK STOREGE © 2026 • Bunia - RDC • International<br>Consulter Gratuitement • Payer pour Publier • Payer pour Rechercher</footer>
+<script>
+function setLang(l,btn){document.querySelectorAll('.lang button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+const t={fr:{s:"Une seule plateforme, toutes les opportunités.",h:"Que cherches-tu aujourd'hui ?"},en:{s:"One platform, all opportunities.",h:"What are you looking for today ?"},sw:{s:"Jukwaa moja, fursa zote.",h:"Unatafuta nini leo ?"},ln:{s:"Plateforme moko, ba opportunité nionso.",h:"Ozo luka nini lelo ?"}};
+document.getElementById('slogan').innerText=t[l].s;document.getElementById('heroTitle').innerText=t[l].h;}
+function filtrer(){let v=document.getElementById('searchInput').value.toLowerCase();document.querySelectorAll('.annonce').forEach(a=>{a.style.display=a.dataset.text.includes(v)?'block':'none';});}
+function filterCat(c,btn){document.querySelectorAll('.cat').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.annonce').forEach(a=>{a.style.display=(c==='TOUT'||a.dataset.cat===c)?'block':'none';});}
+function showCat(c){alert('Rubrique : '+c+'\nConsulter = GRATUIT\nDébloquer contact = Payant');}
+function publier(){alert('PUBLIER UNE ANNONCE\n\n1. Choisis ta catégorie\n2. Choisis ta durée\n3. Paie par M-Pesa / Airtel / Orange\n4. Publie tes photos\n\nProchaine étape : on construit le vrai formulaire.');}
+function debloquer(n){alert('DÉBLOQUER : '+n+'\n\nPaiement recherche : 0,80 USD / 1 mois\nM-Pesa / Airtel / Orange\n\nProchaine étape : on branche le vrai paiement.');}
+</script>
 </body>
 </html>
