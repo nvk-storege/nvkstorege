@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NVK STOREGE</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; font-family: Arial, sans-serif; }
+body { background:#f2f4f8; }
+.header { background:#0b3d91; color:white; padding:18px 15px; text-align:center; }
+.header h1 { font-size:26px; letter-spacing:1px; }
+.header p { font-size:13px; opacity:0.9; margin-top:4px; }
+.search-box { padding:12px; background:white; }
+.search-box input { width:100%; padding:12px; border:1px solid #ddd; border-radius:25px; font-size:15px; }
+.lang { display:flex; justify-content:center; gap:8px; padding:8px; }
+.lang button { padding:6px 12px; border:1px solid #0b3d91; background:white; color:#0b3d91; border-radius:20px; cursor:pointer; }
+.lang button.active { background:#0b3d91; color:white; }
+.grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:15px; }
+.card { background:white; border-radius:12px; padding:20px 10px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.08); cursor:pointer; }
+.card span { font-size:32px; display:block; }
+.card h3 { margin-top:8px; color:#0b3d91; font-size:16px; }
+.card p { font-size:12px; color:#666; margin-top:4px; }
+.publish { grid-column: span 2; background:#ff7a00; color:white; }
+.publish h3 { color:white; }
+.publish p { color:white; }
+.section { padding:0 15px 15px; }
+.section h2 { font-size:16px; margin-bottom:10px; color:#222; }
+.empty { background:white; padding:20px; text-align:center; color:#888; border-radius:10px; font-size:14px; }
+.footer { text-align:center; padding:15px; font-size:12px; color:#888; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>NVK STOREGE</h1>
+  <p>Une seule plateforme, toutes les opportunités.</p>
+</div>
+
+<div class="search-box">
+  <input type="text" placeholder="Que cherchez-vous ? Moto, maison, terrain...">
+</div>
+
+<div class="lang">
+  <button class="active">Français</button>
+  <button>English</button>
+  <button>Swahili</button>
+  <button>Lingala</button>
+</div>
+
+<div class="grid">
+  <div class="card">
+    <span>🛒</span>
+    <h3>VENTE</h3>
+    <p>Vendre & Acheter</p>
+  </div>
+  <div class="card">
+    <span>🏠</span>
+    <h3>LOCATION</h3>
+    <p>Louer & Se loger</p>
+  </div>
+  <div class="card">
+    <span>🔧</span>
+    <h3>AUTRES SERVICES</h3>
+    <p>Prestataires & Clients</p>
+  </div>
+  <div class="card publish">
+    <span>➕</span>
+    <h3>PUBLIER UNE ANNONCE</h3>
+    <p>Publier après paiement</p>
+  </div>
+</div>
+
+<div class="section">
+  <h2>Annonces Récentes</h2>
+  <div class="empty">Aucune annonce pour le moment.<br>Les nouvelles annonces apparaîtront ici.</div>
+</div>
+
+<div class="section">
+  <h2>Annonces Populaires</h2>
+  <div class="empty">Aucune annonce populaire pour le moment.</div>
+</div>
+
+<div class="footer">NVK STOREGE © 2026 - Bunia, RDC</div>
+
+</body>
+</html>
