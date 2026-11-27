@@ -3,23 +3,79 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Publier - NVK Storege</title>
+<title>Publier une annonce - NVK STOREGE</title>
 <style>
-body{font-family:Arial;background:#f2f2f2;padding:20px}
-.box{background:white;padding:20px;border-radius:15px;max-width:500px;margin:auto}
-input,textarea,select{width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:10px}
-button{width:100%;padding:14px;background:#25D366;color:white;border:none;border-radius:10px;font-size:16px;font-weight:bold}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#f2f4f7;padding-bottom:30px}
+header{background:#0f2a5a;color:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
+header b{font-size:19px} header b span{color:#ffb400}
+header a{color:#fff;text-decoration:none;font-size:13px;background:#ffffff22;padding:7px 10px;border-radius:20px}
+.top{padding:16px} .top h1{font-size:22px;color:#0f2a5a} .top p{color:#666;font-size:13px;margin-top:4px}
+.card{background:#fff;margin:12px 16px;padding:16px;border-radius:14px;box-shadow:0 2px 10px #0001}
+label{display:block;font-size:13px;font-weight:bold;margin:14px 0 5px;color:#222}
+label:first-child{margin-top:0}
+input,select,textarea{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;font-size:15px;background:#fafafa}
+textarea{min-height:90px;resize:vertical}
+.row{display:flex;gap:10px} .row>div{flex:1}
+.type{display:flex;gap:8px} .type button{flex:1;padding:11px;border:2px solid #ddd;background:#fff;border-radius:10px;font-weight:bold;cursor:pointer}
+.type button.active{background:#0f2a5a;color:#fff;border-color:#0f2a5a}
+.photos{border:2px dashed #ffb400;border-radius:12px;padding:18px;text-align:center;background:#fffaf0;color:#555;font-size:13px}
+.photos span{font-size:28px;display:block}
+#preview{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+#preview img{width:80px;height:80px;object-fit:cover;border-radius:10px}
+.btn{width:100%;background:#ff8c00;color:#fff;border:none;padding:15px;border-radius:12px;font-size:17px;font-weight:bold;margin-top:8px;cursor:pointer}
+.btn2{width:100%;background:#0f2a5a;color:#fff;border:none;padding:13px;border-radius:12px;font-size:15px;font-weight:bold;margin-top:10px;cursor:pointer}
+.success{background:#e6ffe6;border:1px solid #4caf50;color:#1a7a1a;padding:12px;border-radius:10px;margin-top:12px;display:none;text-align:center}
+small{color:#888;font-size:12px}
 </style>
 </head>
 <body>
-<div class="box">
-<h2>📦 Publier un article</h2>
-<input placeholder="Nom de l'article">
-<input placeholder="Prix en $">
-<select><option>Téléphones</option><option>Ordinateurs</option><option>Vêtements</option><option>Autres</option></select>
-<textarea placeholder="Description..."></textarea>
-<input placeholder="Ton numéro WhatsApp">
-<button>Publier sur NVK Storege</button>
+<header><b>NVK <span>STOREGE</span></b><a href="index.html">← Accueil</a></header>
+<div class="top"><h1>Publier une annonce</h1><p>Publiez votre annonce en 2 minutes. Vente, Location ou Service.</p></div>
+<div class="card">
+<label>1. Type d'annonce *</label>
+<div class="type" id="typeBtns">
+<button type="button" class="active" onclick="setType('VENTE',this)">VENTE</button>
+<button type="button" onclick="setType('LOCATION',this)">LOCATION</button>
+<button type="button" onclick="setType('SERVICE',this)">SERVICE</button>
 </div>
+<label>Titre de l'annonce *</label>
+<input id="titre" placeholder="Ex: Maison 3 chambres à louer, Parcelle à vendre...">
+<label>Catégorie *</label>
+<select id="categorie" onchange="majSous()">
+<option value="">-- Choisir une catégorie --</option>
+<option>Immobilier</option><option>Véhicules</option><option>Agriculture</option><option>Électronique</option><option>Habillement</option><option>Construction</option><option>Mobilier</option><option>Autres Services</option>
+</select>
+<label>Sous-catégorie *</label>
+<select id="sous"><option value="">-- D'abord choisir catégorie --</option></select>
+<label>Prix *</label>
+<div class="row"><div><input id="prix" type="number" placeholder="Ex: 250"></div><div><select id="devise"><option>$ USD</option><option>FC - Franc Congolais</option></select></div></div>
+<small id="prixInfo">Pour LOCATION : prix par mois. Pour VENTE : prix total.</small>
+<label>Localisation *</label>
+<div class="row"><div><select id="ville"><option value="">Ville</option><option>Bunia</option><option>Butembo</option><option>Goma</option><option>Beni</option><option>Kisangani</option><option>Kinshasa</option><option>Lubumbashi</option><option>Autre ville</option></select></div><div><input id="quartier" placeholder="Quartier"></div></div>
+<input id="adresse" placeholder="Adresse précise (ex: Mudzi-Pela, Av. ...)" style="margin-top:10px">
+<label>Photos * (max 5)</label>
+<div class="photos" onclick="document.getElementById('files').click()">📷<br><b>Cliquez pour ajouter des photos</b><br>La 1ère photo sera la photo principale</div>
+<input type="file" id="files" accept="image/*" multiple hidden onchange="previewPhotos(event)">
+<div id="preview"></div>
+<label>Description *</label>
+<textarea id="desc" placeholder="Décrivez votre bien : nombre de chambres, superficie, état, avantages..."></textarea>
+<label>Votre nom *</label>
+<input id="nom" placeholder="Ex: Nkosi Kabila">
+<label>Numéro WhatsApp *</label>
+<input id="whatsapp" placeholder="Ex: +243 970 000 000">
+<button class="btn" onclick="publier()">+ PUBLIER MON ANNONCE</button>
+<div class="success" id="ok">✅ Annonce enregistrée ! Elle apparaîtra sur l'Accueil après validation par l'Admin.</div>
+<button class="btn2" onclick="location.href='index.html'">Voir mes annonces sur l'Accueil →</button>
+<p style="text-align:center;color:#888;font-size:12px;margin-top:12px">En publiant, vous acceptez la commission NVK STOREGE de 1% (0,5% vendeur + 0,5% acheteur) lors d'une transaction réussie.</p>
+</div>
+<script>
+let typeActuel='VENTE';
+const sousCat={"Immobilier":["Maison","Parcelle / Terrain","Appartement","Chambre","Villa","Boutique / Magasin","Bureau"],"Véhicules":["Voiture","Moto","Vélo","Camion"],"Agriculture":["Riz","Haricot","Maïs","Café","Cacao","Autre produit"],"Électronique":["Téléphone","Ordinateur","Télévision","Autre"],"Habillement":["Vêtements","Chaussures","Sacs"],"Construction":["Ciment","Fer","Sable","Briques","Autre"],"Mobilier":["Chaise","Table","Lit","Canapé","Tente","Autre"],"Autres Services":["Emploi","Transport","Livraison","Construction","Réparation","Formation","Services juridiques","Autre service"]};
+function setType(t,btn){typeActuel=t;document.querySelectorAll('#typeBtns button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.getElementById('prixInfo').innerText=t==='LOCATION'?'Pour LOCATION : prix par mois.':t==='VENTE'?'Pour VENTE : prix total.':'Pour SERVICE : prix du service.';}
+function majSous(){let c=document.getElementById('categorie').value;let s=document.getElementById('sous');s.innerHTML='<option value="">-- Choisir --</option>';if(sousCat[c]){sousCat[c].forEach(x=>{s.innerHTML+=`<option>${x}</option>`})}}
+function previewPhotos(e){let p=document.getElementById('preview');p.innerHTML='';[...e.target.files].slice(0,5).forEach(f=>{let r=new FileReader();r.onload=ev=>{p.innerHTML+=`<img src="${ev.target.result}">`};r.readAsDataURL(f);});}
+function publier(){let titre=document.getElementById('titre').value.trim();let cat=document.getElementById('categorie').value;let prix=document.getElementById('prix').value;let ville=document.getElementById('ville').value;let nom=document.getElementById('nom').value.trim();let wa=document.getElementById('whatsapp').value.trim();if(!titre||!cat||!prix||!ville||!nom||!wa){alert('Svp, remplissez tous les champs avec *');return;}let annonces=JSON.parse(localStorage.getItem('nvk_annonces')||'[]');annonces.unshift({titre,cat,type:typeActuel,prix,devise:document.getElementById('devise').value,ville,quartier:document.getElementById('quartier').value,nom,wa,date:new Date().toLocaleDateString()});localStorage.setItem('nvk_annonces',JSON.stringify(annonces));document.getElementById('ok').style.display='block';window.scrollTo(0,0);}
+</script>
 </body>
 </html>
